@@ -1,18 +1,28 @@
-import React from "react";
-import { Col, Card, Alert, Spinner } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Col, Card } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
-import fetchGenreAction from "../actions";
+import { connect } from "react-redux";
+import { fetchGenreAction } from "../actions";
+const mapStateToProps = (props) => ({ ...props });
+
+const mapDispatchToProps = (dispatch) => ({
+  getSongs: (genre) => dispatch(fetchGenreAction(genre)),
+});
 
 const ArtistCard = (props) => {
-  props.fetchGenreAction(props.pop);
-  return props.artists.map((artist, index) => (
+  useEffect(() => {
+    console.log(props.songs);
+    const gen = props.pop;
+    props.getSongs(gen);
+  }, []);
+  return props.songs.genre.map((artist, index) => (
     <Col
       xs={12}
       sm={6}
       lg={4}
       xl={2}
       key={index}
-      onClick={() => this.props.history.push("/artist/" + artist.id)}
+      onClick={() => props.history.push("/artist/" + artist.id)}
     >
       <Card>
         <Card.Img variant="top" src={artist.picture_xl} alt="artistImage" />
@@ -24,4 +34,7 @@ const ArtistCard = (props) => {
   ));
 };
 
-export default withRouter(ArtistCard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(ArtistCard));
