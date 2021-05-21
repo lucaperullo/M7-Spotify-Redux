@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import fetchGenreAction from "../actions";
 
 const ArtistCard = (props) => {
-  props.fetchGenreAction(genre);
+  props.fetchGenreAction(props.pop);
   return props.artists.map((artist, index) => (
     <Col
       xs={12}
