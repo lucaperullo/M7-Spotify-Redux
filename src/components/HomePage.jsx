@@ -2,14 +2,11 @@ import React from "react";
 import HomeNav from "./HomeNav";
 import HomeBody from "./HomeBody";
 import { Container } from "react-bootstrap";
+import {connect} from "react-redux"
 
-class HomePage extends React.Component {
-  state = {
-    genre: 152,
-  };
+const HomePage =(props)=> {
   fetchGenre = (selectedGenre) => {
-    this.setState({ genre: selectedGenre });
-    console.log("GENRE IN HomePage", this.state.genre);
+    console.log("GENRE IN HomePage", props.songs.genre);
   };
   render() {
     return (
@@ -19,11 +16,11 @@ class HomePage extends React.Component {
         className="color-change-5x"
         style={{ paddingBottom: "100px" }}
       >
-        <HomeNav getGenre={this.fetchGenre} />
-        <HomeBody genre={this.state.genre} />
+        <HomeNav />
+        <HomeBody />
       </Container>
     );
   }
 }
 
-export default HomePage;
+export default connect()(HomePage);
