@@ -1,23 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { Container, Row, Jumbotron, ListGroup } from "react-bootstrap";
 import "./ArtistPage.css";
 import SongCard from "./SongCard";
 
-class ArtistPage extends React.Component {
-  state = {
-    artist: {},
-    tracklist: [],
-  };
-  componentDidMount = () => {
-    this.fetchArtist();
-    this.fetchTracklist();
-  };
-  fetchArtist = async () => {
+const ArtistPage = (props) => {
+  useEffect(() => {
+    props.fetchArtist();
+    props.fetchTracklist();
+  }, []);
+  const fetchArtist = async () => {
     try {
       let response = await fetch(
         "https://deezerdevs-deezer.p.rapidapi.com/artist/" +
-          this.props.match.params.id,
+          props.match.params.id,
         {
           method: "GET",
           headers: {
@@ -28,16 +25,16 @@ class ArtistPage extends React.Component {
         }
       );
       let parsedResponse = await response.json();
-      this.setState({ artist: parsedResponse });
-      console.log(this.state.artist);
+      props.setState({ artist: parsedResponse });
+      console.log(props.state.artist);
     } catch (error) {
       console.log(error);
     }
   };
-  fetchTracklist = async () => {
+  const fetchTracklist = async () => {
     try {
       let response2 = await fetch(
-        `https://deezerdevs-deezer.p.rapidapi.com/artist/${this.props.match.params.id}/top?limit=50`,
+        `https://deezerdevs-deezer.p.rapidapi.com/artist/${props.match.params.id}/top?limit=50`,
         {
           method: "GET",
           headers: {
@@ -48,75 +45,70 @@ class ArtistPage extends React.Component {
         }
       );
       let parsedResponse2 = await response2.json();
-      this.setState({ tracklist: parsedResponse2.data });
-      console.log(this.state.tracklist);
+      props.setState({ tracklist: parsedResponse2.data });
+      console.log(props.state.tracklist);
     } catch (error) {
       console.log(error);
     }
   };
-  render() {
-    if (this.state.artist) {
-      return (
-        <>
-          <section id="album-banner">
-            <Jumbotron className="py-0 align-items-center text-center">
-              <div className="buttonbox">
-                <p className="text-center p-0 m-0 listeners">
-                  {this.state.artist.nb_fan} FANS
-                </p>
-                <h1 id="groupName">{this.state.artist.name}</h1>
-                <button
-                  id="playbtn"
-                  className="btn-play d-none d-md-inline-block"
-                >
-                  PLAY
-                </button>
-                <button
-                  id="followbtn"
-                  className="btn-follow d-none d-md-inline-block"
-                >
-                  FOLLOW
-                </button>
-                <FontAwesomeIcon icon={["fas", "ellipsis-h"]} />
-              </div>
-              <img
-                className="img-fluid"
-                style={{ width: "100%", height: "50vh", objectFit: "cover" }}
-                src={this.state.artist.picture_xl}
-                alt="album cover"
-              />
-              <div className="wrapper-img"></div>
-              <Row className="d-flex justify-content-center contentnav">
-                <ListGroup horizontal>
-                  <ListGroup.Item>Overview</ListGroup.Item>
-                </ListGroup>
-              </Row>
-            </Jumbotron>
-          </section>
-          <Container fluid className="containerfix">
-            <Row>
-              <Container fluid>
-                <h1
-                  style={{
-                    color: "white",
-                    fontSize: "40px",
-                    marginBottom: "50px",
-                  }}
-                >
-                  Popular Releases
-                </h1>
-                <Row className="popular">
-                  {this.state.tracklist.map((song) => (
-                    <SongCard song={song} />
-                  ))}
-                </Row>
-              </Container>
+  return;
+
+  return (
+    <>
+      <section id="album-banner">
+        <Jumbotron className="py-0 align-items-center text-center">
+          <div className="buttonbox">
+            <p className="text-center p-0 m-0 listeners">
+              {props.state.artist.nb_fan} FANS
+            </p>
+            <h1 id="groupName">{props.state.artist.name}</h1>
+            <button id="playbtn" className="btn-play d-none d-md-inline-block">
+              PLAY
+            </button>
+            <button
+              id="followbtn"
+              className="btn-follow d-none d-md-inline-block"
+            >
+              FOLLOW
+            </button>
+            <FontAwesomeIcon icon={["fas", "ellipsis-h"]} />
+          </div>
+          <img
+            className="img-fluid"
+            style={{ width: "100%", height: "50vh", objectFit: "cover" }}
+            src={props.state.artist.picture_xl}
+            alt="album cover"
+          />
+          <div className="wrapper-img"></div>
+          <Row className="d-flex justify-content-center contentnav">
+            <ListGroup horizontal>
+              <ListGroup.Item>Overview</ListGroup.Item>
+            </ListGroup>
+          </Row>
+        </Jumbotron>
+      </section>
+      <Container fluid className="containerfix">
+        <Row>
+          <Container fluid>
+            <h1
+              style={{
+                color: "white",
+                fontSize: "40px",
+                marginBottom: "50px",
+              }}
+            >
+              Popular Releases
+            </h1>
+            <Row className="popular">
+              {props.state.tracklist.map((song) => (
+                <SongCard song={song} />
+              ))}
             </Row>
           </Container>
-        </>
-      );
-    }
-  }
-}
+        </Row>
+      </Container>
+    </>
+  );
+};
 
-export default ArtistPage;
+export default connect()(ArtistPage);
