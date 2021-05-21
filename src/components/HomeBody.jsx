@@ -6,8 +6,7 @@ class HomeBody extends React.Component {
   render() {
     return (
       <Row>
-        {console.log("GENRE IN HomeBody", this.props.genre)}
-        <ArtistCard genre={this.props.genre} />
+        <ArtistCard pop={132} />
       </Row>
     );
   }

@@ -149,12 +149,10 @@ class FooterPlayer extends React.Component {
           <Row>
             <Col sm={12} lg={3} className="ml-3 d-flex singer-player">
               <div className="img-container">
-                <img id="cover" src={this.props.image} />
+                <img id="cover" />
               </div>
               <div className="title" style={{ color: "#fff" }}>
-                <h4 id="title" className="my-0 mx-3 p-0">
-                  {this.props.song.title}
-                </h4>
+                <h4 id="title" className="my-0 mx-3 p-0"></h4>
               </div>
               <svg
                 width="1em"
